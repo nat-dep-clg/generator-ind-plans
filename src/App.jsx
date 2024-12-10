@@ -1,5 +1,5 @@
 
-import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import {createBrowserRouter, Outlet, RouterProvider} from "react-router-dom";
 import {
     ErrorPage,
     GroupPage,
@@ -13,6 +13,7 @@ import {
 import {actionLogin} from "./actions";
 import {store} from "./store/index.js";
 import {loaderGroup, loaderIndPlans} from "./loaders";
+import GroupSubjectsPage from "./pages/group-subjects-page.jsx";
 
 const router = createBrowserRouter([
     {
@@ -33,11 +34,25 @@ const router = createBrowserRouter([
                 children: [
                     {
                         path: ':group',
-                        element: <GroupPage/>,
+                        element: <Outlet/>,
                         errorElement: <ErrorPage/>,
                         loader: loaderIndPlans(store),
                         // loader: loaderGroup(store),
                         children: [
+                            {
+                                index: true,
+                                element: <GroupPage/>,
+                                // loader: loaderGroup(store),
+                                loader: loaderIndPlans(store),
+                                errorElement: <ErrorPage/>,
+                            },
+                            {
+                                path: 'subjects',
+                                element: <GroupSubjectsPage/>,
+                                // loader: loaderGroup(store),
+                                loader: loaderIndPlans(store),
+                                errorElement: <ErrorPage/>,
+                            },
                             {
                                 path: ":studID/view",
                                 element: <ViewStudentPage />,

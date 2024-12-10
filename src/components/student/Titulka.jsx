@@ -36,12 +36,27 @@ const Titulka = ({ data}) => {
         }
     })
 
-    if (results.isLoading) return <>Loading</>;
+    if (results.isLoading) return <><span className="loading loading-spinner loading-xs"></span>
+        <span className="loading loading-spinner loading-sm"></span>
+        <span className="loading loading-spinner loading-md"></span>
+        <span className="loading loading-spinner loading-lg"></span></>;
 
     return (
         <FormikProvider value={formik}>
             <form onSubmit={formik.handleSubmit}>
-
+                {Object.keys(initialValues).slice(2).map(key => (
+                    <div className="form-group flex justify-between" key={key}>
+                        <label htmlFor={key}>{key}</label>
+                        <input
+                            id={key}
+                            name={key}
+                            type="text"
+                            className="form-control"
+                            value={formik.values[key]}
+                            onChange={formik.handleChange}
+                        />
+                    </div>
+                ))}
                 <div className="card">
                     <div className="card-body">
                         <div className="card-actions justify-end">

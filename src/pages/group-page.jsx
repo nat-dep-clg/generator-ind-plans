@@ -1,6 +1,6 @@
 import {Outlet, useLoaderData, useNavigate, useParams} from "react-router-dom";
-import {FaMagnifyingGlass} from "react-icons/fa6";
-import {FaEdit, FaLock, FaUnlock} from "react-icons/fa";
+import { FaBookBookmark, FaMagnifyingGlass} from "react-icons/fa6";
+import {FaEdit, FaList, FaLock} from "react-icons/fa";
 import {userAPI} from "../store/apis/user.js";
 import {getStudentsQuery} from "../queries/getStudentsQuery.js";
 import {store} from "../store/index.js";
@@ -35,6 +35,10 @@ const GroupPage = () => {
         <>
 
             {!params.studID ? (<div className="overflow-x-auto">
+<GroupView
+    onToListClick={()=>{navigate(`/ind-plans/${params.group}`)}}
+    onToSubjectsClick={()=>{navigate(`/ind-plans/${params.group}/subjects`)}}
+/>
                 <table className="table">
                     <thead>
                     <tr>
@@ -67,6 +71,21 @@ const GroupPage = () => {
         </>
     );
 };
+
+const GroupView = ({onToListClick, onToSubjectsClick}) => {
+    return (
+        <div className="flex justify-end">
+            <div className="join">
+                <button className="btn join-item" onClick={onToListClick}>
+                    <FaList size={48} className="p-1"/>
+                </button>
+                <button className="btn join-item" onClick={onToSubjectsClick}>
+                    <FaBookBookmark size={48} className="p-1"/>
+                </button>
+            </div>
+        </div>
+    )
+}
 
 const ButtonsLine = ({item, onEditClick, onViewClick}) => {
     return (
