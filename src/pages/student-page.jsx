@@ -3,6 +3,9 @@ import Titulka from "../components/student/Titulka.jsx";
 import Semester from "../components/student/Semester.jsx";
 import {FaBookBookmark, FaMagnifyingGlass} from "react-icons/fa6";
 import {FaList} from "react-icons/fa";
+import {store} from "../store/index.js";
+import {getStudentsQuery} from "../queries/getStudentsQuery.js";
+import {userAPI} from "../store/apis/user.js";
 
 const semestersByYear = {
     '1' : [1,2],
@@ -13,13 +16,22 @@ const semestersByYear = {
 
 const StudentPage = () => {
     const navigate = useNavigate();
-    const {students} = useLoaderData();
+    // const {students} = useLoaderData();
     const params = useParams();
+
+    // const navigate = useNavigate();
+    const {user} = store.getState().userState
+    // Формуємо аргументи для запиту
+    const queryArgs = getStudentsQuery(user);
+
+
+    const { data: cachedData, isSuccess } = userAPI.endpoints.getStudents.useQuery(queryArgs);
+
+    const students = isSuccess && cachedData ? cachedData.students : [];
 
     const student = students.filter(o => o.id === +params.studID)[0];
     return (
         <>
-            {JSON.stringify(student, null, 2)}
             <div className="flex justify-between">
                 <h1 className="text-lg font-bold">{student.pip}</h1>
                 <div className="flex justify-end">

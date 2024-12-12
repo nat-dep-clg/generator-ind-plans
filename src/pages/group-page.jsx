@@ -1,4 +1,4 @@
-import {Outlet, useLoaderData, useNavigate, useParams} from "react-router-dom";
+import {Outlet, useNavigate, useParams} from "react-router-dom";
 import { FaBookBookmark, FaMagnifyingGlass} from "react-icons/fa6";
 import {FaEdit, FaList, FaLock} from "react-icons/fa";
 import {userAPI} from "../store/apis/user.js";
@@ -6,7 +6,6 @@ import {getStudentsQuery} from "../queries/getStudentsQuery.js";
 import {store} from "../store/index.js";
 
 const GroupPage = () => {
-    // const {students} = useLoaderData();
     const params = useParams();
     const navigate = useNavigate();
     const {user} = store.getState().userState
@@ -14,10 +13,13 @@ const GroupPage = () => {
     const queryArgs = getStudentsQuery(user);
 
     // Отримуємо селектор для кешованих даних
-    const selectStudents = userAPI.endpoints.getStudents.select(queryArgs);
-    const cachedData = selectStudents(store.getState());
+    // const selectStudents = userAPI.endpoints.getStudents.select(queryArgs);
+    // const cachedData = selectStudents(store.getState());
 
-    const students = cachedData?.status === 'fulfilled' && cachedData?.data ? cachedData.data.students : [];
+    const { data: cachedData, isSuccess } = userAPI.endpoints.getStudents.useQuery(queryArgs);
+
+    const students = isSuccess && cachedData ? cachedData.students : [];
+    // const students = cachedData?.status === 'fulfilled' && cachedData?.data ? cachedData.data.students : [];
 
     // const students = []
 

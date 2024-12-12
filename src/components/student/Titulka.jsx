@@ -1,6 +1,8 @@
-import { useFormik, FormikProvider } from 'formik';
+import {useFormik, FormikProvider, Field} from 'formik';
 import {userAPI} from "../../store/apis/user.js";
 import {store} from "../../store/index.js";
+import {UniversalField} from "../formik/index.js";
+
 
 const Titulka = ({ data}) => {
     const {user} = store.getState().userState
@@ -14,7 +16,7 @@ const Titulka = ({ data}) => {
     const formik = useFormik({
         initialValues: {...initialValues},
         onSubmit: values => {
-
+            console.log(values);
             const [row, ...old] = Object.values(data)
             const newObj = {...values}
             const arr = Object.values({...data, titulka: JSON.stringify(newObj)}).slice(1)
@@ -43,20 +45,38 @@ const Titulka = ({ data}) => {
 
     return (
         <FormikProvider value={formik}>
-            <form onSubmit={formik.handleSubmit}>
-                {Object.keys(initialValues).slice(2).map(key => (
-                    <div className="form-group flex justify-between" key={key}>
-                        <label htmlFor={key}>{key}</label>
-                        <input
-                            id={key}
-                            name={key}
-                            type="text"
-                            className="form-control"
-                            value={formik.values[key]}
-                            onChange={formik.handleChange}
-                        />
-                    </div>
-                ))}
+            <form onSubmit={formik.handleSubmit} className="p-1 border-2 rounded-xl">
+                <UniversalField
+                    name={'№'}
+                    label={'Номер'}
+                    type={'text'}
+                    placeholder={'номер з ЄДЕБО'}
+                />
+                <UniversalField
+                    name={'photo'}
+                    label={'Фото'}
+                    type={'file'}
+                />
+
+                <UniversalField
+                    name={'group'}
+                    label={'Група'}
+                    type={'text'}
+                    disabled={true}
+                />
+
+                <UniversalField
+                    name={'Галузь знань'}
+                    label={'Галузь знань'}
+                    type={'text'}
+                    disabled={true}
+                />
+                <UniversalField
+                    name={'Спеціальність'}
+                    label={'Спеціальність'}
+                    type={'text'}
+                    disabled={true}
+                />
                 <div className="card">
                     <div className="card-body">
                         <div className="card-actions justify-end">
